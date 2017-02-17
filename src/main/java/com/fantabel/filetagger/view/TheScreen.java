@@ -2,6 +2,7 @@ package com.fantabel.filetagger.view;
 
 import java.awt.BorderLayout;
 import java.awt.event.ActionListener;
+import java.io.File;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -9,6 +10,7 @@ import javax.swing.JFrame;
 public class TheScreen extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
+	private FileTree fileTree;
 	private JButton btnGo;
 	
 	public TheScreen() {
@@ -21,25 +23,30 @@ public class TheScreen extends JFrame {
 		
 		btnGo = new JButton("Go!");
 		
+		fileTree = new FileTree(new File("./test"));
+		
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
 	
 	public static TheScreen createAndShowGUI() {
 		TheScreen frame = new TheScreen();
-		frame.setResizable(false);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
 		frame.addComponentsToPane();
 		
 		// Display the window.
 		frame.pack();
+		// frame.setResizable(false);
+		frame.setLocationRelativeTo(null);
+		frame.setVisible(true);
 		return frame;
 		
 	}
 	
 	private void addComponentsToPane() {
-		this.getContentPane().add(btnGo);
+		this.getContentPane().add(btnGo, BorderLayout.PAGE_END);
+		this.getContentPane().add(fileTree, BorderLayout.LINE_START);
 		
 	}
 	

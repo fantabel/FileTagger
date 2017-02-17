@@ -3,10 +3,6 @@ package com.fantabel.filetagger.controller;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.io.IOException;
-import java.nio.charset.Charset;
-import java.nio.file.Files;
-import java.util.List;
 
 import javax.swing.UIManager;
 import javax.swing.UIManager.LookAndFeelInfo;
@@ -21,38 +17,26 @@ public class Controller {
 	
 	private TheScreen mainFrame;
 	
-	private void createAndShowGui() {
+	private void mainScreenTurnOn() {
 		mainFrame = TheScreen.createAndShowGUI();
 		
 		mainFrame.addBoutonGoActionListener(new ActionListener() {
-			
+			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				File f = new File("xfiles.txt");
-				try {
-					List<String> list = Files.readAllLines(f.toPath(),
-		                    Charset.defaultCharset());
-					for (String s : list) {
-						File tempFile = new File(s.replace("./", "./test/"));
-						File parentFolder = tempFile.getParentFile();
-						if (!parentFolder.exists()) {
-							parentFolder.mkdirs();
-						}
-						System.out.println(tempFile.getParentFile() + " "
-		                        + tempFile.toPath().toAbsolutePath() + " "
-		                        + tempFile.exists());
-						tempFile.createNewFile();
-						
-					}
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
 			
+			}
 		});
 		
-		mainFrame.setVisible(true);
-		
+	}
+	
+	private void listFiles(File parent) {
+		File[] fileList = parent.listFiles();
+		for (File f : fileList) {
+			System.out.println(f.toPath().getFileName());
+			if (f.isDirectory()) {
+				listFiles(f);
+			}
+		}
 	}
 	
 	public static void main(String[] args) {
@@ -67,9 +51,10 @@ public class Controller {
 		
 		}
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
+			@Override
 			public void run() {
 				Controller c = new Controller();
-				c.createAndShowGui();
+				c.mainScreenTurnOn();
 			}
 		});
 	}
