@@ -60,88 +60,94 @@ import com.fantabel.filetagger.model.LeafFile;
  */
 public class FileTree extends JPanel {
 	private static final long serialVersionUID = 1L;
-
+	
 	/** Construct a FileTree */
 	public FileTree(File dir) {
 		setLayout(new BorderLayout());
-
+		
 		// Make a tree list with all the nodes, and make it a JTree
 		JTree tree = new JTree(addNodes(null, dir));
-
+		((AbstractFile) ((DefaultMutableTreeNode) tree.getModel().getRoot())
+		        .getUserObject()).analyse();
 		// Add a listener
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			@Override
 			public void valueChanged(TreeSelectionEvent e) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) e
+		                .getPath().getLastPathComponent();
 				AbstractFile currentFile = (AbstractFile) node.getUserObject();
 				currentFile.analyse();
 			}
 		});
-
+		
 		// Lastly, put the JTree into a JScrollPane.
 		JScrollPane scrollpane = new JScrollPane();
 		scrollpane.getViewport().add(tree);
-
+		
 		add(BorderLayout.CENTER, scrollpane);
 	}
-
+	
 	/** Add nodes from under "dir" into curTop. Highly recursive. */
 	DefaultMutableTreeNode addNodes(DefaultMutableTreeNode curTop, File dir) {
 		String curPath = dir.getPath();
 		Folder currentFolder = new Folder(dir.getPath());
-		DefaultMutableTreeNode curDir = new DefaultMutableTreeNode(currentFolder);
-
+		DefaultMutableTreeNode curDir = new DefaultMutableTreeNode(
+		        currentFolder);
+				
 		if (curTop != null) { // should only be null at root
 			curTop.add(curDir);
 		}
-
+		
 		Vector<String> ol = new Vector<String>();
 		String[] tmp = dir.list();
-
+		
 		for (String s : tmp) {
 			ol.addElement(s);
 		}
-
+		
 		Collections.sort(ol, String.CASE_INSENSITIVE_ORDER);
-
+		
 		File f;
 		Vector<String> files = new Vector<String>();
-
+		
 		// Make two passes, one for Dirs and one for Files. This is #1.
 		for (int i = 0; i < ol.size(); i++) {
 			String thisObject = ol.elementAt(i);
 			String newPath;
-
+			
 			if (curPath.equals(".")) {
 				newPath = thisObject;
 			} else {
 				newPath = curPath + File.separator + thisObject;
 			}
-
+			
 			if ((f = new File(newPath)).isDirectory()) {
 				addNodes(curDir, f);
 			} else {
 				files.addElement(thisObject);
 			}
 		}
-
+		
 		// Pass two: for files.
 		for (int fnum = 0; fnum < files.size(); fnum++) {
-			LeafFile currentFile = new LeafFile(curPath + File.separator + files.elementAt(fnum), currentFolder);
+			LeafFile currentFile = new LeafFile(
+			        curPath + File.separator + files.elementAt(fnum),
+			        currentFolder);
+			currentFolder.addFile(currentFile);
 			curDir.add(new DefaultMutableTreeNode(currentFile));
 		}
-
+		
 		return curDir;
 	}
-
+	
 	@Override
 	public Dimension getMinimumSize() {
 		return new Dimension(200, 400);
 	}
-
+	
 	@Override
 	public Dimension getPreferredSize() {
 		return new Dimension(500, 1000);
 	}
-
+	
 }

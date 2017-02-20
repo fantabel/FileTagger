@@ -23,7 +23,7 @@ public class TheScreen extends JFrame {
 		
 		btnGo = new JButton("Go!");
 		
-		fileTree = new FileTree(new File("./test"));
+		fileTree = new FileTree(new File("./The.X-Files"));
 		
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
