@@ -11,6 +11,7 @@ public class TheScreen extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 	private FileTree fileTree;
+	private ShowPanel showPanel;
 	private JButton btnGo;
 	
 	public TheScreen() {
@@ -24,6 +25,8 @@ public class TheScreen extends JFrame {
 		btnGo = new JButton("Go!");
 		
 		fileTree = new FileTree(new File("./The.X-Files"));
+		
+		showPanel = new ShowPanel();
 		
 		this.setResizable(false);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -47,6 +50,7 @@ public class TheScreen extends JFrame {
 	private void addComponentsToPane() {
 		this.getContentPane().add(btnGo, BorderLayout.PAGE_END);
 		this.getContentPane().add(fileTree, BorderLayout.LINE_START);
+		this.getContentPane().add(showPanel, BorderLayout.CENTER);
 		
 	}
 	

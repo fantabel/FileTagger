@@ -36,7 +36,6 @@ package com.fantabel.filetagger.view;
 */
 
 import java.awt.BorderLayout;
-import java.awt.Dimension;
 import java.io.File;
 import java.util.Collections;
 import java.util.Vector;
@@ -139,15 +138,11 @@ public class FileTree extends JPanel {
 		
 		return curDir;
 	}
-	
-	@Override
-	public Dimension getMinimumSize() {
-		return new Dimension(200, 400);
-	}
-	
-	@Override
-	public Dimension getPreferredSize() {
-		return new Dimension(500, 1000);
-	}
-	
+	/*
+	 * @Override public Dimension getMinimumSize() { return new Dimension(200,
+	 * 400); }
+	 * 
+	 * @Override public Dimension getPreferredSize() { return new Dimension(500,
+	 * 1000); }
+	 */
 }
