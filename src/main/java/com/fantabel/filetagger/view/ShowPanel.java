@@ -1,5 +1,6 @@
 package com.fantabel.filetagger.view;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 
@@ -21,9 +22,11 @@ public class ShowPanel extends JPanel {
 	
 	public ShowPanel() {
 		
-		this.setLayout(new GridLayout(0, 2));
+		this.setLayout(new GridLayout(6, 2));
 		
 		lblShowName = new JLabel("Show name");
+		lblShowName.setOpaque(true);
+		lblShowName.setBackground(Color.BLUE);
 		lblSeasonNumber = new JLabel("Season number");
 		lblEpisodeNumber = new JLabel("Episode number");
 		
@@ -38,12 +41,16 @@ public class ShowPanel extends JPanel {
 		txtSeasonNumber.setPreferredSize(d);
 		txtEpisodeNumber.setPreferredSize(d);
 		
+		this.setPreferredSize(new Dimension(600, 600));
+		
 		this.add(lblShowName);
 		this.add(txtShowName);
 		this.add(lblSeasonNumber);
 		this.add(txtSeasonNumber);
 		this.add(lblEpisodeNumber);
 		this.add(txtEpisodeNumber);
+		this.add(new JLabel(""));
+		this.add(new JLabel(""));
 		
 	}
 	
