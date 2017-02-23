@@ -1,8 +1,8 @@
 package com.fantabel.filetagger.view;
 
-import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.GridLayout;
+import java.awt.GridBagConstraints;
+import java.awt.GridBagLayout;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -22,11 +22,11 @@ public class ShowPanel extends JPanel {
 	
 	public ShowPanel() {
 		
-		this.setLayout(new GridLayout(6, 2));
+		this.setLayout(new GridBagLayout());
+		GridBagConstraints c = new GridBagConstraints();
 		
 		lblShowName = new JLabel("Show name");
 		lblShowName.setOpaque(true);
-		lblShowName.setBackground(Color.BLUE);
 		lblSeasonNumber = new JLabel("Season number");
 		lblEpisodeNumber = new JLabel("Episode number");
 		
@@ -43,14 +43,26 @@ public class ShowPanel extends JPanel {
 		
 		this.setPreferredSize(new Dimension(600, 600));
 		
-		this.add(lblShowName);
-		this.add(txtShowName);
-		this.add(lblSeasonNumber);
-		this.add(txtSeasonNumber);
-		this.add(lblEpisodeNumber);
-		this.add(txtEpisodeNumber);
-		this.add(new JLabel(""));
-		this.add(new JLabel(""));
+		c.gridx = 0;
+		c.gridy = 0;
+		this.add(lblShowName, c);
+		
+		c.gridx = 1;
+		c.gridy = 0;
+		
+		this.add(txtShowName, c);
+		c.gridx = 0;
+		c.gridy = 1;
+		this.add(lblSeasonNumber, c);
+		c.gridx = 1;
+		c.gridy = 1;
+		this.add(txtSeasonNumber, c);
+		c.gridx = 0;
+		c.gridy = 2;
+		this.add(lblEpisodeNumber, c);
+		c.gridx = 1;
+		c.gridy = 2;
+		this.add(txtEpisodeNumber, c);
 		
 	}
 	
