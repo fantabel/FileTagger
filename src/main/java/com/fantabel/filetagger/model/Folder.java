@@ -64,23 +64,12 @@ public class Folder extends AbstractFile {
 				seasonStartIndex = m.start();
 				seasonEndIndex = m.end();
 			}
-			System.out.println(filename);
-			setShow(WordUtils.capitalizeFully(
-			        filename.substring(0, seasonStartIndex),
-			        new char[] { '.', '-' }));
-					
-			/*
-			 * String commonPrefix = null; if (commonPrefix == null) {
-			 * commonPrefix = filename; }
-			 * 
-			 * for (int i = commonSuffix.length(); i >= 0; i--) { if
-			 * (filename.startsWith(commonPrefix.substring(0, i))) {
-			 * commonPrefix = commonSuffix.substring(i, commonSuffix.length());
-			 * break; } }
-			 */
 			
-			// System.out.println(filename.substring(0,
-			// filename.indexOf(commonSuffix)));
+			setShow(WordUtils
+			        .capitalizeFully(filename.substring(0, seasonStartIndex),
+			                new char[] { '.', '-' })
+			        .replace('.', ' '));
+					
 		}
 		
 		fileList.stream().filter(f -> !f.isAnalysed())

@@ -47,19 +47,22 @@ public class ShowPanel extends JPanel {
 		c.gridy = 0;
 		this.add(lblShowName, c);
 		
-		c.gridx = 1;
-		c.gridy = 0;
-		
-		this.add(txtShowName, c);
 		c.gridx = 0;
 		c.gridy = 1;
 		this.add(lblSeasonNumber, c);
-		c.gridx = 1;
-		c.gridy = 1;
-		this.add(txtSeasonNumber, c);
+		
 		c.gridx = 0;
 		c.gridy = 2;
 		this.add(lblEpisodeNumber, c);
+		
+		c.gridx = 1;
+		c.gridy = 0;
+		this.add(txtShowName, c);
+		
+		c.gridx = 1;
+		c.gridy = 1;
+		this.add(txtSeasonNumber, c);
+		
 		c.gridx = 1;
 		c.gridy = 2;
 		this.add(txtEpisodeNumber, c);
