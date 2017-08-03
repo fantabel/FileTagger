@@ -37,8 +37,12 @@ package com.fantabel.filetagger.view;
 
 import java.awt.BorderLayout;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
+import java.util.List;
 import java.util.Vector;
+import java.util.stream.Collectors;
 
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -59,83 +63,97 @@ import com.fantabel.filetagger.model.LeafFile;
  */
 public class FileTree extends JPanel {
 	private static final long serialVersionUID = 1L;
-	
+
 	/** Construct a FileTree */
 	public FileTree(File dir) {
 		setLayout(new BorderLayout());
-		
+
 		// Make a tree list with all the nodes, and make it a JTree
 		JTree tree = new JTree(addNodes(null, dir));
-		((AbstractFile) ((DefaultMutableTreeNode) tree.getModel().getRoot())
-		        .getUserObject()).analyse();
+		((AbstractFile) ((DefaultMutableTreeNode) tree.getModel().getRoot()).getUserObject()).analyse();
 		// Add a listener
 		tree.addTreeSelectionListener(new TreeSelectionListener() {
 			@Override
 			public void valueChanged(TreeSelectionEvent e) {
-				DefaultMutableTreeNode node = (DefaultMutableTreeNode) e
-		                .getPath().getLastPathComponent();
+				DefaultMutableTreeNode node = (DefaultMutableTreeNode) e.getPath().getLastPathComponent();
 				AbstractFile currentFile = (AbstractFile) node.getUserObject();
 				currentFile.analyse();
 			}
 		});
-		
+
 		// Lastly, put the JTree into a JScrollPane.
 		JScrollPane scrollpane = new JScrollPane();
 		scrollpane.getViewport().add(tree);
-		
+
 		add(BorderLayout.CENTER, scrollpane);
 	}
-	
+
+	public static boolean contains(String filename, String pattern) {
+		return filename.toLowerCase().contains(pattern.toLowerCase());
+	}
+
+	public static boolean filenameContainsExcludedPatterns(final String fileName) {
+		String[] excluded = { "MACOSX", ".nfo", ".DS_Store", ".db", ".xml", ".SFV", ".txt", "#0001", ".par", ".pdf",
+				".ini", ".TNC" };
+		List<String> list = Arrays.asList(excluded);
+		return list.stream().anyMatch(s -> contains(fileName, s));
+		// return fileName.contains("MACOSX") || fileName.contains(".nfo") ||
+		// fileName.contains(".DS_Store");
+	}
+
 	/** Add nodes from under "dir" into curTop. Highly recursive. */
 	DefaultMutableTreeNode addNodes(DefaultMutableTreeNode curTop, File dir) {
 		String curPath = dir.getPath();
 		Folder currentFolder = new Folder(dir.getPath());
-		DefaultMutableTreeNode curDir = new DefaultMutableTreeNode(
-		        currentFolder);
-				
+		DefaultMutableTreeNode curDir = new DefaultMutableTreeNode(currentFolder);
+
 		if (curTop != null) { // should only be null at root
 			curTop.add(curDir);
 		}
-		
-		Vector<String> ol = new Vector<String>();
+
+		List<String> ol = new ArrayList<String>();
 		String[] tmp = dir.list();
-		
+
 		for (String s : tmp) {
-			ol.addElement(s);
+			if (!filenameContainsExcludedPatterns(s)) {
+				ol.add(s);
+			}
 		}
-		
+
+		ol = ol.stream().filter(s -> !s.isEmpty()).collect(Collectors.toList());
+
 		Collections.sort(ol, String.CASE_INSENSITIVE_ORDER);
-		
+
 		File f;
 		Vector<String> files = new Vector<String>();
-		
+
 		// Make two passes, one for Dirs and one for Files. This is #1.
 		for (int i = 0; i < ol.size(); i++) {
-			String thisObject = ol.elementAt(i);
+			String thisObject = ol.get(i);
 			String newPath;
-			
+
 			if (curPath.equals(".")) {
 				newPath = thisObject;
 			} else {
 				newPath = curPath + File.separator + thisObject;
 			}
-			
+
 			if ((f = new File(newPath)).isDirectory()) {
 				addNodes(curDir, f);
+
 			} else {
 				files.addElement(thisObject);
 			}
 		}
-		
+
 		// Pass two: for files.
 		for (int fnum = 0; fnum < files.size(); fnum++) {
-			LeafFile currentFile = new LeafFile(
-			        curPath + File.separator + files.elementAt(fnum),
-			        currentFolder);
+			System.out.println(curPath + File.separator + files.elementAt(fnum));
+			LeafFile currentFile = new LeafFile(curPath + File.separator + files.elementAt(fnum), currentFolder);
 			currentFolder.addFile(currentFile);
 			curDir.add(new DefaultMutableTreeNode(currentFile));
 		}
-		
+
 		return curDir;
 	}
 	/*
